@@ -1,0 +1,121 @@
+1. Реализовать класс Студент, у которого есть следующие поля: имя, фамилия, возраст, 
+пол и уникальный идентификатор (номер студака). Создать 5 объектов класса Студент, 
+поместить их в список и вывести всех на экран.
+class Student:
+    def __init__(self, name, familia, age, sex, stud):
+        self.name = name
+        self.familia = familia
+        self.age = age
+        self.sex = sex
+        self.stud = stud
+    def _str_(self):
+        return("{self.name}, {self.familia}, {self.age}, {self.sex}, {self.stud}")
+s1 = Student('Danya','Sokolov','16','m','33333')
+s2 = Student('Matvei','Kareev','18','m','12345')
+s3 = Student('Sofa','Shelobanova','15','f','87965')
+s4 = Student('Kol','Maccol','19','m','45369')
+s5 = Student('Sara','Oberlin','18','f','11111')
+student = [s1, s2, s3, s4, s5]
+print(s1.name, s1.familia, s1.age, s1.sex, s1.stud)
+print(s2.name, s2.familia, s2.age, s2.sex, s2.stud)
+print(s3.name, s3.familia, s3.age, s3.sex, s3.stud)
+print(s4.name, s4.familia, s4.age, s4.sex, s4.stud)
+print(s5.name, s5.familia, s5.age, s5.sex, s5.stud)
+
+2. Теперь необходимо отсортировать наших студентов в списке по возрастанию их 
+возраста. Для этого необходимо модифицировать соответствующим образом функцию 
+сортировки пузырьком, которую мы реализовали на паре (или написать свой вариант)
+class Student:
+
+    students_list = []
+    age_list = []
+    def init(self, name, surname, age, sex, stud):
+        self.name = name
+        self.surname = surname
+        self.age = age
+        self.sex = sex
+        self.stud = stud
+        self.students_list.append([self.name, self.surname, self.age, self.sex, self.stud])
+        self.age_list.append(int(self.age))
+
+def bubble_sort(c, d):
+    a = c[:]
+    n = len(a)
+    for i in range(n - 1):
+        for j in range(n - i - 1):
+            if a[j] > a[j + 1]:
+                a[j], a[j + 1] = a[j + 1], a[j]
+                d[j], d[j + 1] = d[j + 1], d[j]
+    return d
+
+s1 = Student.init(Student, 'Danya', 'Sokolov', 16, 'm', 33333)
+s2 = Student.init(Student, 'Matvei', 'Kareev', 18, 'm', 12345)
+s3 = Student.init(Student, 'Sofa', 'Shelobanova', 15, 'f', 87965)
+s4 = Student.init(Student, 'Kol', 'Maccol', 19, 'm', 45369)
+s5 = Student.init(Student, 'Sara', 'Oberlin', 18, 'f', 11111)
+
+p_age = Student.age_list
+p_doc = Student.students_list
+
+print(bubble_sort(p_age, p_doc))
+
+3-4 Аналогичным образом нужно модифицировать алгоритм бинарного поиска, чтобы он 
+был применим к списку из студентов и выполнял поиск по указанному возрасту.
+Заметим, что возраст студента (количество полных лет) в общем случае не является 
+уникальным значением в рамках группы, то есть у нас может быть несколько студентов 
+с одним и тем же возрастом (почти всегда). Как при этом будет работать бинарный 
+поиск? Какого студента он выдаст, если мы запросим найти студента по возрасту, 
+присущему нескольким студентам? Необходимо исправить алгоритм бинарного поиска 
+таким образом, чтобы в случае если искомое значение встречается в массиве несколько 
+раз, то алгоритм выдавал бы индекс его первого вхождения (самого левого).
+class Student:
+    students_list = []
+    age_list = []
+    def init(self, name, surname, age, sex, stud):
+        self.name = name
+        self.surname = surname
+        self.age = age
+        self.sex = sex
+        self.stud = stud
+
+        self.students_list.append([self.name, self.surname, self.age, self.sex, self.stud])
+        self.age_list.append(int(self.age))
+
+def bubble_sort(c, d):
+    a = c[:]
+    n = len(a)
+    for i in range(n - 1):
+        for j in range(n - i - 1):
+            if a[j] > a[j + 1]:
+                a[j], a[j + 1] = a[j + 1], a[j]
+                d[j], d[j + 1] = d[j + 1], d[j]
+    return [a, d]
+
+def bin_search(target, nums, arr):
+    l = 0
+    r = len(nums) - 1
+    while l <= r:
+        m = (l + r) // 2
+        guess = nums[m]
+        if guess == target and nums[m-1] != target:
+            return arr[m]
+        elif nums[m-1] == target or target < guess:
+            r = m - 1
+        else:
+            l = m + 1
+    return -1
+
+s1 = Student.init(Student, 'Danya', 'Sokolov', 16, 'm', 33333)
+s2 = Student.init(Student, 'Matvei', 'Kareev', 18, 'm', 12345)
+s3 = Student.init(Student, 'Sofa', 'Shelobanova', 15, 'f', 87965)
+s4 = Student.init(Student, 'Kol', 'Maccol', 19, 'm', 45369)
+s5 = Student.init(Student, 'Sara', 'Oberlin', 18, 'f', 11111)
+
+p_age = Student.age_list
+p_doc = Student.students_list
+find = int(input())
+
+a = bubble_sort(p_age, p_doc)
+print(a[1])
+
+print(bin_search(find, a[0], a[1]))
