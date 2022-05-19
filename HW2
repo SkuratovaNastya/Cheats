@@ -1,0 +1,218 @@
+10. Реализовать класс треугольник. Поскольку один и тот же треугольник можно 
+описать несколькими способами (по трем сторонам / по двум сторонам и углу между 
+ними / двум углам и прилежащей стороне / по координатам вершин), то нужно создать 
+конструктор для каждого из способов. При этом у класса должны быть методы по 
+получению значения любой стороны или угла, должны быть методы по вычислению 
+периметра и площади, а также возможность сравнивать с другим треугольником на 
+равенство / подобие.
+
+#импортирует из библиотеки корень и тригонометрию, которая нам пригодится
+from math import sqrt, cos, acos, sin, radians
+#создаем класс Треугольник
+class Triangle:
+#создаем функцию со всеми значения(вначале нулевые), которые будем использовать
+    def __init__(self):
+        self.a = 0.0
+        self.b = 0.0
+        self.c = 0.0
+        self.angleA = 0.0
+        self.angleB = 0.0
+        self.angleC = 0.0
+        self.ay = 0.0
+        self.by = 0.0
+        self.cy = 0.0
+
+        
+#функция, когда известны три стороны
+    def three_sides(self,a,b,c):
+        self.a = a
+        self.b = b
+        self.c = c
+#найти любой угол    
+    def get_anges(self):
+        A = acos((self.b**2+self.c**2-self.a**2)/(2*self.b*self.c))
+        B = acos((self.a**2+self.c**2-self.b**2)/(2*self.a*self.c))
+        C = acos((self.b**2+self.a**2-self.c**2)/(2*self.b*self.a))
+        return A, B, C
+#находит периметр      
+    def get_perimeter(self):
+        p = self.a + self.b + self.c
+        return p
+#находит площадь
+    def get_area(self):
+        p = (self.a + self.b + self.c) / 2
+        area = sqrt(p * (p - self.a) * (p - self.b) * (p - self.c))
+        return area
+#находит подобие/равенство треугольников
+    def get_podobie(self, t):
+        s = sorted([self.a, self.b, self.c])
+        d = sorted([t.a, t.b, t.c])
+        k = int(s[0])/int(d[0])
+        if k != 1:
+            if s[1] != k*d[1] or s[2] != k*d[2]:
+                return 'f'
+            elif s[1] == k*d[1] and s[2] == k*d[2]:
+                print('p')
+            return 'p'
+#равенство треугольников - частный случай подобия, когда к=1        
+        if k == 1:
+            if s[0] == d[0] and s[1] == d[1] and s[2] == d[2]:
+                return 'r'
+
+
+#функция, когда даны 2 стороны и 1 угол
+    def two_sides1angle(self,a,b,angleC):
+        self.a = a
+        self.b = b
+        self.angleC = angleC
+#находит сторону
+    def side(self):
+        d = sqrt(self.a*self.a+self.b*self.b-2*self.a*self.b*cos(self.angleC))
+        return d
+#находит углы
+    def get_anges2(self):
+        c = sqrt(self.a*self.a+self.b*self.b-2*self.a*self.b*cos(self.radians(angleC)))
+        A = acos((c**2+self.b**2-self.a**2)/(2*self.b*c))
+        B = acos((c**2+self.a**2-self.b**2)/(2*self.a*c))
+        return A, B
+#находит периметр      
+    def get_perimeter2(self):
+        c = sqrt(self.a*self.a+self.b*self.b-2*self.a*self.b*cos(self.angleC))
+        p = self.a + self.b + c
+        return p
+#находит площадь
+    def get_area2(self):
+        c = sqrt(self.a*self.a+self.b*self.b-2*self.a*self.b*cos(self.radians(angleC)))
+        p = (self.a + self.b + c) / 2
+        area = sqrt(p * (p - self.a) * (p - self.b) * (p - c))
+        return area
+#находит подобие/равенство треугольников
+    def get_podobie2(self, t):
+        s = sorted([self.a, self.b])
+        d = sorted([t.a, t.b])
+        k = int(s[0])/int(d[0])
+        if k != 1:
+            if s[1] != k*d[1]:
+                return 'f'
+            elif s[1] == k*d[1] and self.angleC == t.angleC:
+                print('p')
+            return 'p'
+#равенство треугольников - частный случай подобия, когда к=1        
+        if k == 1:
+            if s[0] == d[0] and s[1] == d[1] and self.angleC == t.angleC:
+                return 'r'
+
+ 
+#функция, когда даны 1 сторона и 2 угла
+    def one_side2angles(self,a,angleA, angleB):
+        self.a = a
+        self.angleB = angleB
+        self.angleA = angleA
+#находит угол
+    def get_angle2(self):
+        angleC = 180-(self.angleB+self.angleA)
+        return angleC
+#находит сторону
+    def side2(self):
+        angleC = 180-(self.angleB+self.angleA)
+        b = (self.a*sin(radians(self.angleB)))/sin(radians(self.angleA))
+        c = (self.a*sin(radians(angleC)))/sin(radians(self.angleA))
+        return b, c
+#находит периметр      
+    def get_perimeter3(self):
+        angleC = 180-(self.angleB+self.angleA)
+        b = (self.a*sin(radians(self.angleB)))/sin(radians(self.angleA))
+        c = (self.a*sin(radians(angleC)))/sin(radians(self.angleA))
+        p = self.a + b + c
+        return p
+#находит площадь
+    def get_area3(self):
+        angleC = 180-(self.angleB+self.angleA)
+        b = (self.a*sin(radians(self.angleB)))/sin(radians(self.angleA))
+        c = (self.a*sin(radians(angleC)))/sin(radians(self.angleA))
+        p = (self.a + self.b + self.c) / 2
+        area = sqrt(p * (p - self.a) * (p - b) * (p - c))
+        return area
+#находит подобие/равенство треугольников
+    def get_podobie3(self, t):
+        if self.angleA == t.angleA and self.angleB == t.angleB:
+            return 'p'
+        else:
+            return 'f'
+
+        
+#функция для нахождения по координатам
+#a, b - координаты первой точки
+#c, angleA - координаты второй точки
+#angleB, angleC - координаты третьей точки
+    def koordinati(self, a, b, c, angleA, angleB, angleC):
+        self.a = a
+        self.b = b
+        self.c = c
+        self.angleA = angleA
+        self.angleB = angleB
+        self.angleC = angleC
+#находит стороны по координатам
+#А = сторона от 1 до 2 точки
+#В = сторона от 2 до 3 точки
+#С = сторона от 3 до 1 точки
+    def side_koor(self):
+        a = sqrt((self.a - self.c)**2+(self.b - self.angleA)**2)
+        b = sqrt((self.c - self.angleB)**2+(self.angleA- self.angleC)**2)
+        c = sqrt((self.a - self.angleB)**2+(self.b- self.angleC)**2)
+        return a, b, c
+#найти любой угол    
+    def get_anges4(self):
+        a = sqrt((self.a - self.c)**2+(self.b - self.angleA)**2)
+        b = sqrt((self.c - self.angleB)**2+(self.angleA- self.angleC)**2)
+        c = sqrt((self.a - self.angleB)**2+(self.b- self.angleC)**2)
+        A = acos((b**2+c**2-a**2)/(2*b*c))
+        B = acos((a**2+c**2-b**2)/(2*a*c))
+        C = acos((b**2+a**2-c**2)/(2*b*a))
+        return A, B, C
+#находит периметр      
+    def get_perimeter4(self):
+        a = sqrt((self.a - self.c)**2+(self.b - self.angleA)**2)
+        b = sqrt((self.c - self.angleB)**2+(self.angleA- self.angleC)**2)
+        c = sqrt((self.a - self.angleB)**2+(self.b- self.angleC)**2)
+        p = a + b + c
+        return p
+#находит площадь
+    def get_area4(self):
+        a = sqrt((self.a - self.c)**2+(self.b - self.angleA)**2)
+        b = sqrt((self.c - self.angleB)**2+(self.angleA- self.angleC)**2)
+        c = sqrt((self.a - self.angleB)**2+(self.b- self.angleC)**2)
+        p = (a + b + c) / 2
+        area = sqrt(p * (p - a) * (p - b) * (p - c))
+        return area
+#находит подобие/равенство треугольников
+    def get_podobie4(self, r):
+        a = sqrt((self.a - self.c)**2+(self.b - self.angleA)**2)
+        b = sqrt((self.c - self.angleB)**2+(self.angleA- self.angleC)**2)
+        c = sqrt((self.a - self.angleB)**2+(self.b- self.angleC)**2)
+        t.a = sqrt((r.a - r.c)**2+(r.b - r.angleA)**2)
+        t.b = sqrt((r.c - r.angleB)**2+(r.angleA-r.angleC)**2)
+        t.c = sqrt((r.a - r.angleB)**2+(r.b-r.angleC)**2)
+        s = sorted([a, b, c])
+        d = sorted([t.a, t.b, t.c])
+        k = int(s[0])/int(d[0])
+        if k != 1:
+            if s[1] != k*d[1] or s[2] != k*d[2]:
+                return 'f'
+            elif s[1] == k*d[1] and s[2] == k*d[2]:
+                print('p')
+            return 'p'
+#равенство треугольников - частный случай подобия, когда к=1        
+        if k == 1:
+            if s[0] == d[0] and s[1] == d[1] and s[2] == d[2]:
+                return 'r'
+
+
+#для запуска класса надо переменной передать класс           
+r = Triangle()
+t = Triangle()
+#вызвать главную функцию из класса
+r.koordinati(1, 2, 3, 4, 3, 2)
+t.koordinati(1, 2, 3, 4, 3, 2)
+#вызвать вторую функцию из класса, в которой заключено решение задачи
+print(t.get_podobie4(r))
